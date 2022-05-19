@@ -8,6 +8,8 @@ function wallet(state = INITIAL_STATE, action) {
   switch (action.type) {
   case 'WALLET_ACTION':
     return { ...action.state };
+  case 'CURRENCY_ACTION':
+    return { ...state, currencies: action.result };
   default:
     return state;
   }
