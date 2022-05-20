@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Table from '../component/Table';
 import { currenciesCoin, expensesAction, currenciesCoinExpecific } from '../actions';
 
 class Wallet extends React.Component {
@@ -20,8 +21,8 @@ class Wallet extends React.Component {
    this.setState({
      value: '',
      description: '',
-     category: 'Alimentação',
-     currencies: 'USD',
+     tag: 'Alimentação',
+     currency: 'USD',
      method: 'Dinheiro',
    });
  }
@@ -35,28 +36,28 @@ class Wallet extends React.Component {
 
   handleChange = ({ target }) => {
     const { value, name } = target;
-    this.setState({ [name]: value }, this.verifica);
+    this.setState({ [name]: value });
   };
 
   addExpense = () => {
     const { expenses, allCoins, mapExpenses, CoinExpecific } = this.props;
-    const { value, description, category, currencies, method } = this.state;
+    const { value, description, tag, currency, method } = this.state;
     const teste = {
       id: mapExpenses.length,
       value,
       description,
-      currency: currencies,
+      currency,
       method,
-      tag: category,
+      tag,
       exchangeRates: allCoins };
     expenses(teste);
-    const valor = allCoins[currencies];
+    const valor = allCoins[currency];
     this.changeValueHeader(valor, value);
     CoinExpecific();
   };
 
   render() {
-    const { email, currencies } = this.props;
+    const { email, currency, mapExpenses } = this.props;
     const { value, description, ask } = this.state;
     return (
       <div>
@@ -92,8 +93,8 @@ class Wallet extends React.Component {
           </label>
           <label htmlFor="currencies">
             Moeda:
-            <select name="currencies" id="currencies" onChange={ this.handleChange }>
-              {currencies.map((coin, index) => (
+            <select name="currency" id="currencies" onChange={ this.handleChange }>
+              {currency.map((coin, index) => (
                 <option
                   key={ index }
                   value={ coin }
@@ -119,7 +120,7 @@ class Wallet extends React.Component {
           <label htmlFor="category">
             Categoria:
             <select
-              name="category"
+              name="tag"
               id="category"
               data-testid="tag-input"
               onChange={ this.handleChange }
@@ -140,6 +141,32 @@ class Wallet extends React.Component {
             } }
           />
         </section>
+        <table>
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Tag</th>
+              <th>Método de pagamento</th>
+              <th>Valor</th>
+              <th>Moeda</th>
+              <th>Câmbio utilizado</th>
+              <th>Valor convertido</th>
+              <th>Moeda de conversão</th>
+              <th>Editar/Excluir</th>
+            </tr>
+            {mapExpenses && mapExpenses.map((spent, index) => (
+              <Table
+                key={ index }
+                currency={ spent.currency }
+                description={ spent.description }
+                method={ spent.method }
+                tag={ spent.tag }
+                value={ spent.value }
+                exchangeRates={ spent.exchangeRates }
+              />
+            ))}
+          </thead>
+        </table>
       </div>
     );
   }
@@ -149,7 +176,7 @@ Wallet.propTypes = {
   email: PropTypes.string.isRequired,
   walletKeyCoin: PropTypes.func.isRequired,
   expenses: PropTypes.func.isRequired,
-  currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
+  currency: PropTypes.arrayOf(PropTypes.string).isRequired,
   mapExpenses: PropTypes.arrayOf(PropTypes.shape).isRequired,
   allCoins: PropTypes.arrayOf(PropTypes.shape).isRequired,
   CoinExpecific: PropTypes.func.isRequired,
@@ -157,7 +184,7 @@ Wallet.propTypes = {
 
 const mapStateToProps = (state) => ({
   email: state.user.email,
-  currencies: state.wallet.currencies,
+  currency: state.wallet.currencies,
   mapExpenses: state.wallet.expenses,
   allCoins: state.wallet.coinPrices,
 });
