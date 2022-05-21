@@ -6,7 +6,6 @@ import { currenciesCoin, expensesAction, currenciesCoinExpecific } from '../acti
 
 class Wallet extends React.Component {
  state = {
-   ask: 0,
    value: '',
    description: '',
  };
@@ -27,12 +26,15 @@ class Wallet extends React.Component {
    });
  }
 
-  changeValueHeader = (valor, valor2) => {
-    const valorMoeda = valor.ask * valor2;
-    this.setState((prevState) => (
-      { ask: prevState.ask + valorMoeda }
-    ));
-  }
+teste = () => {
+  const { mapExpenses } = this.props;
+  const teste = mapExpenses.map((asd) => (
+    asd.value * asd.exchangeRates[asd.currency].ask
+  ));
+  const conta = teste.reduce((acc, element) => acc + element, 0);
+  // this.setState({ ask: teste.length > 0 ? conta : 0 });
+  return teste.length > 0 ? conta : 0;
+}
 
   handleChange = ({ target }) => {
     const { value, name } = target;
@@ -51,20 +53,19 @@ class Wallet extends React.Component {
       tag,
       exchangeRates: allCoins };
     expenses(teste);
-    const valor = allCoins[currency];
-    this.changeValueHeader(valor, value);
     CoinExpecific();
   };
 
   render() {
     const { email, currency, mapExpenses } = this.props;
-    const { value, description, ask } = this.state;
+    const { value, description } = this.state;
+    this.teste();
     return (
       <div>
         <header>
           <p data-testid="email-field">{email}</p>
           <p data-testid="total-field">
-            {ask.toFixed(2)}
+            {this.teste().toFixed(2)}
           </p>
           <p data-testid="header-currency-field">BRL</p>
         </header>
@@ -154,16 +155,18 @@ class Wallet extends React.Component {
               <th>Moeda de conversão</th>
               <th>Editar/Excluir</th>
             </tr>
-            {mapExpenses && mapExpenses.map((spent, index) => (
-              <Table
-                key={ index }
-                currency={ spent.currency }
-                description={ spent.description }
-                method={ spent.method }
-                tag={ spent.tag }
-                value={ spent.value }
-                exchangeRates={ spent.exchangeRates }
-              />
+            {mapExpenses && mapExpenses.map((spent) => (
+              <tr key={ spent.id }>
+                <Table
+                  id={ spent.id }
+                  currency={ spent.currency }
+                  description={ spent.description }
+                  method={ spent.method }
+                  tag={ spent.tag }
+                  value={ spent.value }
+                  exchangeRates={ spent.exchangeRates }
+                />
+              </tr>
             ))}
           </thead>
         </table>

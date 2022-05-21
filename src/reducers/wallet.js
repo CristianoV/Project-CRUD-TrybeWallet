@@ -16,6 +16,9 @@ function wallet(state = INITIAL_STATE, action) {
     return { ...state, expenses: [...state.expenses, action.result] };
   case 'CURRENCY_EXPECIFIC_ACTION':
     return { ...state, coinPrices: action.result };
+  case 'DELETE_CURRENCY':
+    return { ...state,
+      expenses: [...action.result] };
   default:
     return state;
   }
