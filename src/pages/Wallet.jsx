@@ -2,12 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Table from '../component/Table';
-import { currenciesCoin, expensesAction, currenciesCoinExpecific } from '../actions';
+import { currenciesCoin, expensesAction,
+  currenciesCoinExpecific, deleteExpensesAction } from '../actions';
+import { objectOf } from 'prop-types';
 
 class Wallet extends React.Component {
  state = {
-   value: '',
-   description: '',
  };
 
  componentDidMount() {
@@ -32,14 +32,33 @@ teste = () => {
     asd.value * asd.exchangeRates[asd.currency].ask
   ));
   const conta = teste.reduce((acc, element) => acc + element, 0);
-  // this.setState({ ask: teste.length > 0 ? conta : 0 });
   return teste.length > 0 ? conta : 0;
+}
+
+editExpenses = (id) => {
+  const { mapExpenses } = this.props;
+  const filtro = mapExpenses.filter((edit) => edit.id === id);
+  this.setState(...filtro);
+  this.setState({ edit: true });
 }
 
   handleChange = ({ target }) => {
     const { value, name } = target;
     this.setState({ [name]: value });
   };
+
+  handleTeste = () => {
+    const { mapExpenses, deleteExpense } = this.props;
+    const { id } = this.state;
+    const filtro = mapExpenses.find((edit) => edit.id === id);
+    console.log(filtro);
+    const teste = mapExpenses;
+    teste[filtro.id] = this.state;
+    console.log(teste);
+    deleteExpense(teste);
+    this.setState({ edit: false });
+    this.cleanState();
+  }
 
   addExpense = () => {
     const { expenses, allCoins, mapExpenses, CoinExpecific } = this.props;
@@ -58,7 +77,7 @@ teste = () => {
 
   render() {
     const { email, currency, mapExpenses } = this.props;
-    const { value, description } = this.state;
+    const { value, description, method, tag, edit, currency: moeda } = this.state;
     this.teste();
     return (
       <div>
@@ -94,7 +113,12 @@ teste = () => {
           </label>
           <label htmlFor="currencies">
             Moeda:
-            <select name="currency" id="currencies" onChange={ this.handleChange }>
+            <select
+              name="currency"
+              id="currencies"
+              value={ moeda }
+              onChange={ this.handleChange }
+            >
               {currency.map((coin, index) => (
                 <option
                   key={ index }
@@ -111,6 +135,7 @@ teste = () => {
               name="method"
               id="pay"
               data-testid="method-input"
+              value={ method }
               onChange={ this.handleChange }
             >
               <option value="Dinheiro">Dinheiro</option>
@@ -124,6 +149,7 @@ teste = () => {
               name="tag"
               id="category"
               data-testid="tag-input"
+              value={ tag }
               onChange={ this.handleChange }
             >
               <option value="Alimentação">Alimentação</option>
@@ -133,14 +159,21 @@ teste = () => {
               <option value="Saúde">Saúde</option>
             </select>
           </label>
-          <input
-            type="button"
-            value="Adicionar despesa"
-            onClick={ () => {
-              this.addExpense();
-              this.cleanState();
-            } }
-          />
+          { edit
+            ? (
+              <input
+                type="button"
+                value="Editar despesa"
+                data-testid="currency-input"
+                onClick={ () => this.handleTeste() }
+              />
+            )
+            : (
+              <input
+                type="button"
+                value="Adicionar despesa"
+                onClick={ () => { this.addExpense(); this.cleanState(); } }
+              />)}
         </section>
         <table>
           <thead>
@@ -165,6 +198,7 @@ teste = () => {
                   tag={ spent.tag }
                   value={ spent.value }
                   exchangeRates={ spent.exchangeRates }
+                  edit={ this.editExpenses }
                 />
               </tr>
             ))}
@@ -196,6 +230,7 @@ const mapDispatchToProps = (dispatch) => ({
   walletKeyCoin: () => dispatch(currenciesCoin()),
   expenses: (state) => dispatch(expensesAction(state)),
   CoinExpecific: () => dispatch(currenciesCoinExpecific()),
+  deleteExpense: (result) => dispatch(deleteExpensesAction(result)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wallet);

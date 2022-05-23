@@ -14,7 +14,7 @@ handleClickExcluir = (id) => {
 
 render() {
   const { id, currency, description, method, tag,
-    value, exchangeRates } = this.props;
+    value, exchangeRates, edit } = this.props;
   const valueParse = parseFloat(value);
   const teste = parseFloat(exchangeRates[currency].ask);
   return (
@@ -44,7 +44,12 @@ render() {
         Real
       </td>
       <td>
-        <input type="button" value="Editar" />
+        <input
+          type="button"
+          value="Editar"
+          data-testid="edit-btn"
+          onClick={ () => edit(id) }
+        />
         <input
           type="button"
           value="Excluir"
