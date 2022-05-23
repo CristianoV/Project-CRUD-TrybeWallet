@@ -50,10 +50,10 @@ editExpenses = (id) => {
     const { mapExpenses, deleteExpense } = this.props;
     const { id } = this.state;
     const findEdit = mapExpenses.find((edit) => edit.id === id);
-    // console.log(findEdit);
     const allExpenses = mapExpenses;
-    allExpenses[findEdit.id] = this.state;
-    console.log(allExpenses);
+    const estado = this.state;
+    delete estado.edit;
+    allExpenses[findEdit.id] = estado;
     deleteExpense(allExpenses);
     this.setState({ edit: false });
     this.cleanState();
@@ -75,7 +75,7 @@ editExpenses = (id) => {
   };
 
   render() {
-    const { email, currency, mapExpenses } = this.props;
+    const { email, currencyRedux, mapExpenses } = this.props;
     const { value, description, method, tag, edit, currency: moeda } = this.state;
     this.calculate();
     return (
@@ -115,10 +115,11 @@ editExpenses = (id) => {
             <select
               name="currency"
               id="currencies"
+              data-testid="currency-input"
               value={ moeda }
               onChange={ this.handleChange }
             >
-              {currency.map((coin, index) => (
+              {currencyRedux.map((coin, index) => (
                 <option
                   key={ index }
                   value={ coin }
@@ -163,7 +164,6 @@ editExpenses = (id) => {
               <input
                 type="button"
                 value="Editar despesa"
-                data-testid="currency-input"
                 onClick={ () => this.handleTeste() }
               />
             )
@@ -212,15 +212,16 @@ Wallet.propTypes = {
   email: PropTypes.string.isRequired,
   walletKeyCoin: PropTypes.func.isRequired,
   expenses: PropTypes.func.isRequired,
-  currency: PropTypes.arrayOf(PropTypes.string).isRequired,
+  currencyRedux: PropTypes.arrayOf(PropTypes.string).isRequired,
   mapExpenses: PropTypes.arrayOf(PropTypes.shape).isRequired,
   allCoins: PropTypes.arrayOf(PropTypes.shape).isRequired,
   CoinExpecific: PropTypes.func.isRequired,
+  deleteExpense: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   email: state.user.email,
-  currency: state.wallet.currencies,
+  currencyRedux: state.wallet.currencies,
   mapExpenses: state.wallet.expenses,
   allCoins: state.wallet.coinPrices,
 });
