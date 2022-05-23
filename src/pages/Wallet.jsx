@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Table from '../component/Table';
 import { currenciesCoin, expensesAction,
   currenciesCoinExpecific, deleteExpensesAction } from '../actions';
-import { objectOf } from 'prop-types';
 
 class Wallet extends React.Component {
  state = {
@@ -26,7 +25,7 @@ class Wallet extends React.Component {
    });
  }
 
-teste = () => {
+calculate = () => {
   const { mapExpenses } = this.props;
   const teste = mapExpenses.map((asd) => (
     asd.value * asd.exchangeRates[asd.currency].ask
@@ -50,12 +49,12 @@ editExpenses = (id) => {
   handleTeste = () => {
     const { mapExpenses, deleteExpense } = this.props;
     const { id } = this.state;
-    const filtro = mapExpenses.find((edit) => edit.id === id);
-    console.log(filtro);
-    const teste = mapExpenses;
-    teste[filtro.id] = this.state;
-    console.log(teste);
-    deleteExpense(teste);
+    const findEdit = mapExpenses.find((edit) => edit.id === id);
+    // console.log(findEdit);
+    const allExpenses = mapExpenses;
+    allExpenses[findEdit.id] = this.state;
+    console.log(allExpenses);
+    deleteExpense(allExpenses);
     this.setState({ edit: false });
     this.cleanState();
   }
@@ -78,13 +77,13 @@ editExpenses = (id) => {
   render() {
     const { email, currency, mapExpenses } = this.props;
     const { value, description, method, tag, edit, currency: moeda } = this.state;
-    this.teste();
+    this.calculate();
     return (
       <div>
         <header>
           <p data-testid="email-field">{email}</p>
           <p data-testid="total-field">
-            {this.teste().toFixed(2)}
+            {this.calculate().toFixed(2)}
           </p>
           <p data-testid="header-currency-field">BRL</p>
         </header>
