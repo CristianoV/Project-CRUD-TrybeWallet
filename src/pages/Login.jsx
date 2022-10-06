@@ -38,12 +38,13 @@ class Login extends React.Component {
   render() {
     const { email, password, buttonDisabled } = this.state;
     return (
-      <nav>
-        <div>
-          <label htmlFor="email">
+      <nav className="grid text-center">
+        <div className="mb-3">
+          <label className="form-label" htmlFor="email">
             Email:
             <input
               type="email"
+              className="form-control"
               required
               name="email"
               id="email"
@@ -53,11 +54,12 @@ class Login extends React.Component {
             />
           </label>
         </div>
-        <div>
-          <label htmlFor="senha">
+        <div className="mb-3">
+          <label className="form-label" htmlFor="senha">
             Senha:
             <input
               type="password"
+              className="form-control"
               required
               name="password"
               id="senha"
@@ -69,6 +71,7 @@ class Login extends React.Component {
         </div>
         <input
           type="button"
+          className="btn btn-primary"
           value="Entrar"
           disabled={ buttonDisabled }
           onClick={ () => this.handleClick() }

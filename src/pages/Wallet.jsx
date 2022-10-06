@@ -87,7 +87,7 @@ editExpenses = (id) => {
           </p>
           <p data-testid="header-currency-field">BRL</p>
         </header>
-        <section>
+        <section className="table table-striped text-center">
           <label htmlFor="value">
             Valor:
             <input
@@ -174,7 +174,7 @@ editExpenses = (id) => {
                 onClick={ () => { this.addExpense(); this.cleanState(); } }
               />)}
         </section>
-        <table>
+        <table className="table table-striped">
           <thead>
             <tr>
               <th>Descrição</th>
