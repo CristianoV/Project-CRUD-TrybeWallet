@@ -1,16 +1,25 @@
-# 🚧 README em construção 🚧
+<h1 align="center">
+Projeto TrybeWallet!
+</h1>
 
-<!-- Olá, Tryber!
+## :books: Contexto
 
-Esse é apenas um arquivo inicial para o README do seu projeto.
+## :man_technologist: Tecnologias, bibliotecas e arquiteturas usadas
+  * __React.js__
+  * __React Router Dom__
+  * __Redux__
+  * __Bootstrap__
+  * __Redux Thunk__
+  * __CSS3__
 
-É essencial que você preencha esse documento por conta própria, ok?
+# Instruções da aplicação
+### Instalar dependências
+```
+cd Project-CRUD-TrybeWallet
+npm install
+```
 
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-
-⚠️ IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
-
--->
+### Iniciar Projeto
+```
+npm start
+```
